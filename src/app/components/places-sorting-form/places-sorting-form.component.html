@@ -1,6 +1,7 @@
 <form class="places__sorting" action="#" method="get">
   <span class="places__sorting-caption">Sort by</span>
-  <span appToggle (toggled)="toggleSortingOptions()" (closed)="isOptionsOpen() && closeSortingOptions(false)" class="places__sorting-type" tabindex="0">
+  <span appToggle (toggled)="toggleSortingOptions()" (closed)="isOptionsOpen() && closeSortingOptions(false)"
+        class="places__sorting-type" tabindex="0">
               Popular
               <svg class="places__sorting-arrow" width="7" height="4">
                 <use xlink:href="#icon-arrow-select"></use>
@@ -14,11 +15,22 @@
     'places__options--opened': isOptionsOpen()
     }"
   >
-    <li class="places__option places__option--active" tabindex="0">
-      Popular
-    </li>
-    <li class="places__option" tabindex="0">Price: low to high</li>
-    <li class="places__option" tabindex="0">Price: high to low</li>
-    <li class="places__option" tabindex="0">Top rated first</li>
+
+    @for (sortType of Object.values(SortType); track sortType) {
+      <li appAccessibilityClick (clicked)="onClicked(sortType)"
+        [ngClass]="{
+          'places__option': true,
+          'places__option--active': sortType === currentSortType
+          }"
+        tabindex="0">
+        {{ sortType }}
+      </li>
+    }
+    <!--    <li class="places__option places__option&#45;&#45;active" tabindex="0">
+          Popular
+        </li>
+        <li class="places__option" tabindex="0">Price: low to high</li>
+        <li class="places__option" tabindex="0">Price: high to low</li>
+        <li class="places__option" tabindex="0">Top rated first</li>-->
   </ul>
 </form>
