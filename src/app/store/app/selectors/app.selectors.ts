@@ -1,6 +1,6 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { AppState } from '../../../core/models/app.state';
-import { OfferPreview } from '../../../core/models/offers';
+import {createFeatureSelector, createSelector} from '@ngrx/store';
+import {AppState} from '../../../core/models/app.state';
+import {OfferPreview} from '../../../core/models/offers';
 
 const selectOffersState = createFeatureSelector<AppState['offers']>('offers');
 const selectCityState =
@@ -17,3 +17,8 @@ export const selectOffersByCity = createSelector(
       },
     ),
 );
+
+export const selectCurrentCity = createSelector(
+  selectCityState,
+  city => city
+)
