@@ -8,10 +8,11 @@ import {CITY_LOCATIONS} from '../../core/constants/const';
 import {NgClass} from '@angular/common';
 import {City} from '../../core/models/city';
 import {changeCity} from '../../store/city/actions/city.actions';
+import {PlacesSortingFormComponent} from '../../components/places-sorting-form/places-sorting-form.component';
 
 @Component({
   selector: 'app-main',
-  imports: [HeaderComponent, OfferCardComponent, NgClass],
+  imports: [HeaderComponent, OfferCardComponent, NgClass, PlacesSortingFormComponent],
   templateUrl: './main.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
