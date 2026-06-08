@@ -11,10 +11,11 @@ import {changeCity} from '../../store/city/actions/city.actions';
 import {PlacesSortingFormComponent} from '../../components/places-sorting-form/places-sorting-form.component';
 import {SortOfferByPipe} from './pipes/sort-offer-by.pipe';
 import {OfferPreview} from '../../core/models/offers';
+import {MapComponent} from '../../shared/map/map.component';
 
 @Component({
   selector: 'app-main',
-  imports: [HeaderComponent, OfferCardComponent, NgClass, PlacesSortingFormComponent, SortOfferByPipe],
+  imports: [HeaderComponent, OfferCardComponent, NgClass, PlacesSortingFormComponent, SortOfferByPipe, MapComponent],
   templateUrl: './main.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
