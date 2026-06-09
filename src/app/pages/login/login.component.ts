@@ -5,7 +5,7 @@ import {AppState} from '../../core/models/app.state';
 import {login} from '../../store/user/actions/user.actions';
 import {Credentials} from '../../core/models/credentials';
 import {selectAuthStatus} from '../../store/user/selectors/user.selectors';
-import {filter, first, take} from 'rxjs';
+import {first} from 'rxjs';
 import {AppRoute, AuthorizationStatus} from '../../core/constants/const';
 import {loadOffers} from '../../store/offer/actions/offer.actions';
 import {Router} from '@angular/router';
