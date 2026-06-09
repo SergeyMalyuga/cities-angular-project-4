@@ -26,7 +26,7 @@
             </li>
           }
           <li class="header__nav-item">
-            <a class="header__nav-link" [routerLink]="authStatus() !== AuthorizationStatus.AUTH ? ['/', AppRoute.LOGIN] : '/'">
+            <a (click)="logout()" class="header__nav-link" [routerLink]="authStatus() !== AuthorizationStatus.AUTH ? ['/', AppRoute.LOGIN] : '/'">
               <span class="header__signout">{{authStatus() === AuthorizationStatus.AUTH ? 'Sign out' : 'Login'}}</span>
             </a>
           </li>
