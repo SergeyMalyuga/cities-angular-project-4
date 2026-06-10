@@ -1,12 +1,12 @@
 <div class="page">
-  <app-header/>
+  <app-header />
   <main class="page__main page__main--offer">
     <section class="offer">
       <div class="offer__gallery-container container">
         <div class="offer__gallery">
           @for (image of offer()?.images; track image) {
             <div class="offer__image-wrapper">
-              <img class="offer__image" src="{{image}}" alt="Photo studio"/>
+              <img class="offer__image" src="{{ image }}" alt="Photo studio" />
             </div>
           }
         </div>
@@ -31,30 +31,37 @@
           </div>
           <div class="offer__rating rating">
             <div class="offer__stars rating__stars">
-              <span [style.width.%]="Math.floor((offer()?.rating ?? 0) * 20)"></span>
+              <span
+                [style.width.%]="Math.floor((offer()?.rating ?? 0) * 20)"
+              ></span>
               <span class="visually-hidden">Rating</span>
             </div>
-            <span class="offer__rating-value rating__value">{{ offer()?.rating }}</span>
+            <span class="offer__rating-value rating__value">{{
+              offer()?.rating
+            }}</span>
           </div>
           <ul class="offer__features">
-            <li class="offer__feature offer__feature--entire">{{ offer()?.type | titlecase }}</li>
-            <li
-              class="offer__feature offer__feature--bedrooms">{{ offer()?.bedrooms }}
-              {{ (offer()?.bedrooms ?? 0) > 1 ? 'Bedrooms' : 'Bedroom' }}
+            <li class="offer__feature offer__feature--entire">
+              {{ offer()?.type | titlecase }}
+            </li>
+            <li class="offer__feature offer__feature--bedrooms">
+              {{ offer()?.bedrooms }}
+              {{ (offer()?.bedrooms ?? 0) > 1 ? "Bedrooms" : "Bedroom" }}
             </li>
             <li class="offer__feature offer__feature--adults">
-              Max {{ offer()?.maxAdults }} {{ (offer()?.maxAdults ?? 0) > 1 ? 'adults' : 'adult' }}
+              Max {{ offer()?.maxAdults }}
+              {{ (offer()?.maxAdults ?? 0) > 1 ? "adults" : "adult" }}
             </li>
           </ul>
           <div class="offer__price">
-            <b class="offer__price-value">&euro;{{offer()?.price}}</b>
+            <b class="offer__price-value">&euro;{{ offer()?.price }}</b>
             <span class="offer__price-text">&nbsp;night</span>
           </div>
           <div class="offer__inside">
             <h2 class="offer__inside-title">What&apos;s inside</h2>
             <ul class="offer__inside-list">
               @for (good of offer()?.goods; track good) {
-                <li class="offer__inside-item">{{good}}</li>
+                <li class="offer__inside-item">{{ good }}</li>
               }
             </ul>
           </div>
@@ -66,18 +73,20 @@
               >
                 <img
                   class="offer__avatar user__avatar"
-                  src="{{offer()?.host?.avatarUrl}}"
+                  src="{{ offer()?.host?.avatarUrl }}"
                   width="74"
                   height="74"
                   alt="Host avatar"
                 />
               </div>
-              <span class="offer__user-name"> {{offer()?.host?.name}} </span>
-              <span class="offer__user-status"> {{offer()?.host?.isPro}} </span>
+              <span class="offer__user-name"> {{ offer()?.host?.name }} </span>
+              <span class="offer__user-status">
+                {{ offer()?.host?.isPro }}
+              </span>
             </div>
             <div class="offer__description">
               <p class="offer__text">
-               {{offer()?.description}}
+                {{ offer()?.description }}
               </p>
             </div>
           </div>
@@ -112,15 +121,14 @@
                     from 18th century.
                   </p>
                   <time class="reviews__time" datetime="2019-04-24"
-                  >April 2019
-                  </time
-                  >
+                    >April 2019
+                  </time>
                 </div>
               </li>
             </ul>
             <form class="reviews__form form" action="#" method="post">
               <label class="reviews__label form__label" for="review"
-              >Your review</label
+                >Your review</label
               >
               <div class="reviews__rating-form form__rating">
                 <input
@@ -234,15 +242,18 @@
         </div>
       </div>
       <section class="offer__map map">
-        <app-map [offers]="nearbyOffers()" [activeCard]="null"/>
+        <app-map [offers]="nearbyOffers()" [activeCard]="null" />
       </section>
     </section>
     <div class="container">
       <section class="near-places places">
         <h2 class="near-places__title">Other places in the neighbourhood</h2>
         <div class="near-places__list places__list">
-          @for (nearbyOffer of nearbyOffers() | slice: 0 : 3; track nearbyOffer.id) {
-            <app-offer-card [offer]="nearbyOffer"/>
+          @for (
+            nearbyOffer of nearbyOffers() | slice: 0 : 3;
+            track nearbyOffer.id
+          ) {
+            <app-offer-card [offer]="nearbyOffer" />
           }
         </div>
       </section>
