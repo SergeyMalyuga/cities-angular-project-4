@@ -2,7 +2,7 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { AppState } from '../../../core/models/app.state';
 import { OfferPreview } from '../../../core/models/offers';
 
-const selectOffersState = createFeatureSelector<AppState['offer']>('offers');
+const selectOffersState = createFeatureSelector<AppState['offer']>('offer');
 const selectCityState =
   createFeatureSelector<AppState['currentCity']>('currentCity');
 

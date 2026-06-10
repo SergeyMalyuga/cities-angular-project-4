@@ -1,12 +1,13 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { Store } from '@ngrx/store';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
+import {Store} from '@ngrx/store';
 import {
   selectAuthStatus,
   selectUserEmail,
 } from '../../../store/user/selectors/user.selectors';
-import { RouterLink } from '@angular/router';
-import { AppRoute, AuthorizationStatus } from '../../../core/constants/const';
-import { logout } from '../../../store/user/actions/user.actions';
+import {RouterLink} from '@angular/router';
+import {AppRoute, AuthorizationStatus} from '../../../core/constants/const';
+import {logout} from '../../../store/user/actions/user.actions';
+import {selectFavoriteOffersTotal} from '../../../store/favorite-offer/selectors/favorite-offer.selectors';
 
 @Component({
   selector: 'app-header',
@@ -22,6 +23,7 @@ export class HeaderComponent {
 
   public authStatus = this.store.selectSignal(selectAuthStatus);
   public userEmail = this.store.selectSignal(selectUserEmail);
+  public offersTotal = this.store.selectSignal(selectFavoriteOffersTotal);
 
   public logout(): void {
     if (this.authStatus() === AuthorizationStatus.AUTH) {
