@@ -1,6 +1,6 @@
 import { createEntityAdapter } from '@ngrx/entity';
 import { OfferPreview } from '../../core/models/offers';
-import { OffersState } from '../../core/models/offers.state';
+import { OfferState } from '../../core/models/offer-state';
 import { createReducer, on } from '@ngrx/store';
 import {
   loadOffers,
@@ -9,7 +9,7 @@ import {
 } from './actions/offer.actions';
 
 export const offerAdapter = createEntityAdapter<OfferPreview>();
-const initialState: OffersState = offerAdapter.getInitialState({
+const initialState: OfferState = offerAdapter.getInitialState({
   isLoading: false,
   error: null,
 });

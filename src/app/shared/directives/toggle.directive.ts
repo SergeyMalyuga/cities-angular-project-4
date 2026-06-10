@@ -1,7 +1,13 @@
-import {Directive, EventEmitter, HostBinding, HostListener, Output} from '@angular/core';
+import {
+  Directive,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  Output,
+} from '@angular/core';
 
 @Directive({
-  selector: '[appToggle]'
+  selector: '[appToggle]',
 })
 export class ToggleDirective {
   @Output() toggled = new EventEmitter<void>();

@@ -1,7 +1,7 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {OfferPreview} from '../../../core/models/offers';
-import {TitleCasePipe} from '@angular/common';
-import {HoverTrackerDirective} from '../../directives/hover-tracker.directive';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { OfferPreview } from '../../../core/models/offers';
+import { TitleCasePipe } from '@angular/common';
+import { HoverTrackerDirective } from '../../directives/hover-tracker.directive';
 
 @Component({
   selector: 'app-offer-card',
@@ -9,7 +9,7 @@ import {HoverTrackerDirective} from '../../directives/hover-tracker.directive';
   imports: [TitleCasePipe, HoverTrackerDirective],
 })
 export class OfferCardComponent {
-  @Input({required: true}) offer!: OfferPreview;
+  @Input({ required: true }) offer!: OfferPreview;
   @Output() hovered = new EventEmitter<OfferPreview | null>();
 
   protected readonly Math = Math;

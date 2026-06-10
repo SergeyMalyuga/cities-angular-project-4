@@ -11,8 +11,8 @@ import {
 } from '@angular/common/http';
 import { provideEffects } from '@ngrx/effects';
 import { OfferEffects } from './store/offer/effects/offer.effects';
-import {UserEffects} from './store/user/effects/user.effects';
-import {AuthInterceptor} from './core/interceptors/auth.interceptor';
+import { UserEffects } from './store/user/effects/user.effects';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,7 +24,7 @@ export const appConfig: ApplicationConfig = {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true
-    }
+      multi: true,
+    },
   ],
 };

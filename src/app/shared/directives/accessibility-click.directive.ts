@@ -1,7 +1,7 @@
-import {Directive, EventEmitter, HostListener, Output} from '@angular/core';
+import { Directive, EventEmitter, HostListener, Output } from '@angular/core';
 
 @Directive({
-  selector: '[appAccessibilityClick]'
+  selector: '[appAccessibilityClick]',
 })
 export class AccessibilityClickDirective {
   @Output() clicked = new EventEmitter<void>();
