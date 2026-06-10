@@ -6,14 +6,17 @@ import {login} from '../../store/user/actions/user.actions';
 import {Credentials} from '../../core/models/credentials';
 import {selectAuthStatus} from '../../store/user/selectors/user.selectors';
 import {first} from 'rxjs';
-import {AppRoute, AuthorizationStatus} from '../../core/constants/const';
+import {AppRoute, AuthorizationStatus, CITY_LOCATIONS} from '../../core/constants/const';
 import {loadOffers} from '../../store/offer/actions/offer.actions';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
+import {City} from '../../core/models/city';
+import {changeCity} from '../../store/city/actions/city.actions';
 
 @Component({
   selector: 'app-login',
   imports: [
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterLink
   ],
   templateUrl: './login.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,6 +26,9 @@ export class LoginComponent implements OnInit {
   private store = inject(Store<AppState>);
   private router = inject(Router);
 
+  protected readonly AppRoute = AppRoute;
+
+  public randomCity = this.getRandomCity();
   public loginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.pattern('^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]+$')]],
@@ -31,10 +37,10 @@ export class LoginComponent implements OnInit {
   public ngOnInit(): void {
     this.store.select(selectAuthStatus).pipe(first(status => status === AuthorizationStatus.AUTH))
       .subscribe(() => {
-      this.loginForm.reset();
-      this.store.dispatch(loadOffers());
-      this.router.navigate([AppRoute.MAIN]);
-    })
+        this.loginForm.reset();
+        this.store.dispatch(loadOffers());
+        this.router.navigate([AppRoute.MAIN]);
+      })
   }
 
   public onSubmit(): void {
@@ -50,5 +56,15 @@ export class LoginComponent implements OnInit {
 
   public get emailControl() {
     return this.loginForm.get('email')
+  }
+
+  public changeCity() {
+    this.store.dispatch(changeCity({city: this.randomCity}));
+    this.router.navigate([AppRoute.MAIN]);
+  }
+
+  private getRandomCity(): City {
+    const index = Math.floor(Math.random() * CITY_LOCATIONS.length);
+    return CITY_LOCATIONS[index];
   }
 }
