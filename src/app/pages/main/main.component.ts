@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
-import {HeaderComponent} from '../../shared/header/header.component';
+import {HeaderComponent} from '../../shared/components/header/header.component';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../core/models/app.state';
 import {selectCurrentCity, selectOffersByCity} from '../../store/app/selectors/app.selectors';
-import {OfferCardComponent} from '../../shared/offer-card/offer-card.component';
+import {OfferCardComponent} from '../../shared/components/offer-card/offer-card.component';
 import {CITY_LOCATIONS, SortType} from '../../core/constants/const';
 import {NgClass} from '@angular/common';
 import {City} from '../../core/models/city';
@@ -11,7 +11,7 @@ import {changeCity} from '../../store/city/actions/city.actions';
 import {PlacesSortingFormComponent} from '../../components/places-sorting-form/places-sorting-form.component';
 import {SortOfferByPipe} from './pipes/sort-offer-by.pipe';
 import {OfferPreview} from '../../core/models/offers';
-import {MapComponent} from '../../shared/map/map.component';
+import {MapComponent} from '../../shared/components/map/map.component';
 
 @Component({
   selector: 'app-main',

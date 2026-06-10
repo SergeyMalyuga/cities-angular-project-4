@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {OfferPreview} from '../../core/models/offers';
+import {OfferPreview} from '../../../core/models/offers';
 import {TitleCasePipe} from '@angular/common';
-import {HoverTrackerDirective} from '../directives/hover-tracker.directive';
+import {HoverTrackerDirective} from '../../directives/hover-tracker.directive';
 
 @Component({
   selector: 'app-offer-card',

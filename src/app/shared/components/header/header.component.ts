@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {Store} from '@ngrx/store';
-import {selectAuthStatus} from '../../store/user/selectors/user.selectors';
+import {selectAuthStatus} from '../../../store/user/selectors/user.selectors';
 import {RouterLink} from '@angular/router';
-import {AppRoute, AuthorizationStatus} from '../../core/constants/const';
-import {logout} from '../../store/user/actions/user.actions';
+import {AppRoute, AuthorizationStatus} from '../../../core/constants/const';
+import {logout} from '../../../store/user/actions/user.actions';
 
 @Component({
   selector: 'app-header',

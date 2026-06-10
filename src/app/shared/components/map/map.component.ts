@@ -11,9 +11,9 @@ import {
 } from '@angular/core';
 import * as L from 'leaflet';
 import {Store} from '@ngrx/store';
-import {AppState} from '../../core/models/app.state';
-import {selectCurrentCity} from '../../store/app/selectors/app.selectors';
-import {OfferPreview} from '../../core/models/offers';
+import {AppState} from '../../../core/models/app.state';
+import {selectCurrentCity} from '../../../store/app/selectors/app.selectors';
+import {OfferPreview} from '../../../core/models/offers';
 
 @Component({
   selector: 'app-map',
