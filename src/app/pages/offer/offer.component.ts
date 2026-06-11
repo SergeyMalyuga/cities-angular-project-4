@@ -6,25 +6,27 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { HeaderComponent } from '../../shared/components/header/header.component';
-import { Offer, OfferPreview } from '../../core/models/offers';
-import { Comment } from '../../core/models/comments';
-import { ActivatedRoute, Router } from '@angular/router';
+import {HeaderComponent} from '../../shared/components/header/header.component';
+import {Offer, OfferPreview} from '../../core/models/offers';
+import {Comment} from '../../core/models/comments';
+import {ActivatedRoute, Router} from '@angular/router';
 import {
+  BehaviorSubject,
   catchError,
-  combineLatest,
+  combineLatest, distinctUntilChanged,
   EMPTY,
   filter,
-  map,
-  of,
+  map, merge,
+  of, Subject,
   switchMap,
 } from 'rxjs';
-import { OfferDataService } from '../../core/services/offer-data.service';
-import { AppRoute } from '../../core/constants/const';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { SlicePipe, TitleCasePipe } from '@angular/common';
-import { MapComponent } from '../../shared/components/map/map.component';
-import { OfferCardComponent } from '../../shared/components/offer-card/offer-card.component';
+import {OfferDataService} from '../../core/services/offer-data.service';
+import {AppRoute} from '../../core/constants/const';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {DatePipe, SlicePipe, TitleCasePipe} from '@angular/common';
+import {MapComponent} from '../../shared/components/map/map.component';
+import {OfferCardComponent} from '../../shared/components/offer-card/offer-card.component';
+import {CommentService} from '../../core/services/comment.service';
 
 @Component({
   selector: 'app-offer',
@@ -34,6 +36,7 @@ import { OfferCardComponent } from '../../shared/components/offer-card/offer-car
     MapComponent,
     OfferCardComponent,
     SlicePipe,
+    DatePipe,
   ],
   templateUrl: './offer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,7 +45,9 @@ export class OfferComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private offerService = inject(OfferDataService);
+  private commentService = inject(CommentService);
   private destroyRef = inject(DestroyRef);
+  private refreshComments$ = new Subject<void>();
 
   public offer = signal<Offer | null>(null);
   public comments = signal<Comment[]>([]);
@@ -68,9 +73,19 @@ export class OfferComponent implements OnInit {
             }),
           );
 
+          const comments$ = merge(
+            this.commentService.getComments(id),
+            this.refreshComments$.pipe(
+              switchMap(() => this.commentService.getComments(id)),
+              catchError(() => of([]))
+            )
+          )
+
+
           return combineLatest({
             offer: offer$,
             nearbyOffers: nearbyOffers$,
+            comments: comments$,
           });
         }),
         takeUntilDestroyed(this.destroyRef),
@@ -79,6 +94,7 @@ export class OfferComponent implements OnInit {
         this.offer.set(result.offer);
         this.offerId.set(result.offer.id);
         this.nearbyOffers.set(result.nearbyOffers);
+        this.comments.set(result.comments)
       });
   }
 
