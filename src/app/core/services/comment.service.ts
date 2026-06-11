@@ -14,7 +14,7 @@ export class CommentService {
 
   public getComments(offerId: string): Observable<Comment[]> {
     return this.http
-      .get<Comment[]>(`${BASE_URL}/${APIRoute.COMMENTS}/${offerId}}`)
+      .get<Comment[]>(`${BASE_URL}/${APIRoute.COMMENTS}/${offerId}`)
       .pipe(...defaultHttpPipes<Comment[]>());
   }
 
