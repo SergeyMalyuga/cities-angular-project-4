@@ -1,32 +1,21 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal,} from '@angular/core';
 import {HeaderComponent} from '../../shared/components/header/header.component';
 import {Offer, OfferPreview} from '../../core/models/offers';
 import {Comment} from '../../core/models/comments';
 import {ActivatedRoute, Router} from '@angular/router';
-import {
-  BehaviorSubject,
-  catchError,
-  combineLatest, distinctUntilChanged,
-  EMPTY,
-  filter,
-  map, merge,
-  of, Subject,
-  switchMap,
-} from 'rxjs';
+import {catchError, combineLatest, EMPTY, filter, map, merge, of, Subject, switchMap,} from 'rxjs';
 import {OfferDataService} from '../../core/services/offer-data.service';
-import {AppRoute} from '../../core/constants/const';
+import {AppRoute, AuthorizationStatus} from '../../core/constants/const';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {DatePipe, SlicePipe, TitleCasePipe} from '@angular/common';
 import {MapComponent} from '../../shared/components/map/map.component';
 import {OfferCardComponent} from '../../shared/components/offer-card/offer-card.component';
 import {CommentService} from '../../core/services/comment.service';
+import {CommentFormComponent} from '../../components/comment-form/comment-form.component';
+import {SortByDatePipe} from './pipes/sort-by-date.pipe';
+import {Store} from '@ngrx/store';
+import {AppState} from '../../core/models/app.state';
+import {selectAuthStatus} from '../../store/user/selectors/user.selectors';
 
 @Component({
   selector: 'app-offer',
@@ -37,6 +26,8 @@ import {CommentService} from '../../core/services/comment.service';
     OfferCardComponent,
     SlicePipe,
     DatePipe,
+    CommentFormComponent,
+    SortByDatePipe,
   ],
   templateUrl: './offer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -48,11 +39,15 @@ export class OfferComponent implements OnInit {
   private commentService = inject(CommentService);
   private destroyRef = inject(DestroyRef);
   private refreshComments$ = new Subject<void>();
+  private store = inject(Store<AppState>);
+
+  protected readonly Math = Math;
 
   public offer = signal<Offer | null>(null);
   public comments = signal<Comment[]>([]);
   public nearbyOffers = signal<OfferPreview[]>([]);
   public offerId = signal<string | null>(null);
+  public authStatus = this.store.selectSignal(selectAuthStatus);
 
   ngOnInit(): void {
     this.route.paramMap
@@ -98,5 +93,9 @@ export class OfferComponent implements OnInit {
       });
   }
 
-  protected readonly Math = Math;
+  public refreshComments() {
+    this.refreshComments$.next();
+  }
+
+  protected readonly AuthorizationStatus = AuthorizationStatus;
 }
