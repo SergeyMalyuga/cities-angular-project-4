@@ -18,6 +18,7 @@ import {AppState} from '../../core/models/app.state';
 import {selectAuthStatus} from '../../store/user/selectors/user.selectors';
 import {OfferService} from '../../core/services/offer.service';
 import {selectIsFavoriteOffersLoading} from '../../store/favorite-offer/selectors/favorite-offer.selectors';
+import {ScrollUpDirective} from '../../shared/directives/scroll-up.directive';
 
 @Component({
   selector: 'app-offer',
@@ -31,6 +32,7 @@ import {selectIsFavoriteOffersLoading} from '../../store/favorite-offer/selector
     CommentFormComponent,
     SortByDatePipe,
     NgClass,
+    ScrollUpDirective,
   ],
   templateUrl: './offer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
