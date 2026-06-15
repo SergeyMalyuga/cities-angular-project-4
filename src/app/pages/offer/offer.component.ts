@@ -3,11 +3,11 @@ import {HeaderComponent} from '../../shared/components/header/header.component';
 import {Offer, OfferPreview} from '../../core/models/offers';
 import {Comment} from '../../core/models/comments';
 import {ActivatedRoute, Router} from '@angular/router';
-import {catchError, combineLatest, EMPTY, filter, map, merge, of, Subject, switchMap,} from 'rxjs';
+import {catchError, combineLatest, EMPTY, filter, first, map, merge, of, Subject, switchMap, tap,} from 'rxjs';
 import {OfferDataService} from '../../core/services/offer-data.service';
 import {AppRoute, AuthorizationStatus} from '../../core/constants/const';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {DatePipe, SlicePipe, TitleCasePipe} from '@angular/common';
+import {DatePipe, NgClass, SlicePipe, TitleCasePipe} from '@angular/common';
 import {MapComponent} from '../../shared/components/map/map.component';
 import {OfferCardComponent} from '../../shared/components/offer-card/offer-card.component';
 import {CommentService} from '../../core/services/comment.service';
@@ -16,6 +16,8 @@ import {SortByDatePipe} from './pipes/sort-by-date.pipe';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../core/models/app.state';
 import {selectAuthStatus} from '../../store/user/selectors/user.selectors';
+import {OfferService} from '../../core/services/offer.service';
+import {selectIsFavoriteOffersLoading} from '../../store/favorite-offer/selectors/favorite-offer.selectors';
 
 @Component({
   selector: 'app-offer',
@@ -28,6 +30,7 @@ import {selectAuthStatus} from '../../store/user/selectors/user.selectors';
     DatePipe,
     CommentFormComponent,
     SortByDatePipe,
+    NgClass,
   ],
   templateUrl: './offer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,19 +38,23 @@ import {selectAuthStatus} from '../../store/user/selectors/user.selectors';
 export class OfferComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private offerService = inject(OfferDataService);
+  private offerDataService = inject(OfferDataService);
+  private offerService = inject(OfferService);
   private commentService = inject(CommentService);
   private destroyRef = inject(DestroyRef);
   private refreshComments$ = new Subject<void>();
+  private refreshOffer$ = new Subject<void>();
   private store = inject(Store<AppState>);
 
   protected readonly Math = Math;
+  protected readonly AuthorizationStatus = AuthorizationStatus;
 
   public offer = signal<Offer | null>(null);
   public comments = signal<Comment[]>([]);
   public nearbyOffers = signal<OfferPreview[]>([]);
   public offerId = signal<string | null>(null);
   public authStatus = this.store.selectSignal(selectAuthStatus);
+  public isFavoriteOfferLoading = this.store.selectSignal(selectIsFavoriteOffersLoading);
 
   ngOnInit(): void {
     this.route.paramMap
@@ -55,14 +62,17 @@ export class OfferComponent implements OnInit {
         map((params) => params.get('id')),
         filter((id): id is string => id !== null),
         switchMap((id) => {
-          const offer$ = this.offerService.getOfferById(id).pipe(
-            catchError(() => {
-              this.router.navigate([AppRoute.MAIN]);
-              return EMPTY;
-            }),
-          );
+          const offer$ = merge(
+            this.offerDataService.getOfferById(id),
+            this.refreshOffer$.pipe(switchMap(() =>
+                this.offerDataService.getOfferById(id)),
+              catchError(() => {
+                this.router.navigate([AppRoute.MAIN]);
+                return EMPTY;
+              }),
+            ));
 
-          const nearbyOffers$ = this.offerService.getNearbyOffers(id).pipe(
+          const nearbyOffers$ = this.offerDataService.getNearbyOffers(id).pipe(
             catchError(() => {
               return of([]);
             }),
@@ -97,5 +107,15 @@ export class OfferComponent implements OnInit {
     this.refreshComments$.next();
   }
 
-  protected readonly AuthorizationStatus = AuthorizationStatus;
+  public toggleFavoriteOffer() {
+    const offer = this.offer();
+    if (offer) {
+      this.offerService.toggleFavorite(offer.id, !offer.isFavorite)
+        .pipe(first(success => success !== null), tap((success) => {
+          if (success) {
+            this.refreshOffer$.next();
+          }
+        })).subscribe();
+    }
+  }
 }
