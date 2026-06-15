@@ -14,7 +14,7 @@ export const loadFavoriteOffersFailure = createAction(
 
 export const toggleFavorite = createAction(
   '[Favorite Offer] Toggle Offer',
-  props<{ offerId: string }>(),
+  props<{ offerId: string, isFavorite: boolean }>(),
 );
 export const toggleFavoriteSuccess = createAction(
   '[Favorite Offer] Toggle Offer Success',
