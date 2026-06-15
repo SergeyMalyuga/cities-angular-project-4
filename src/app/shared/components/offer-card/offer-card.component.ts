@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
+import {Component, DestroyRef, EventEmitter, inject, Input, Output} from '@angular/core';
 import {OfferPreview} from '../../../core/models/offers';
 import {NgClass, TitleCasePipe} from '@angular/common';
 import {HoverTrackerDirective} from '../../directives/hover-tracker.directive';
@@ -9,6 +9,8 @@ import {Store} from '@ngrx/store';
 import {AppState} from '../../../core/models/app.state';
 import {selectIsFavoriteOffersLoading} from '../../../store/favorite-offer/selectors/favorite-offer.selectors';
 import {selectAuthStatus} from '../../../store/user/selectors/user.selectors';
+import {first, tap} from 'rxjs';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-offer-card',
@@ -18,9 +20,11 @@ import {selectAuthStatus} from '../../../store/user/selectors/user.selectors';
 export class OfferCardComponent {
   @Input({required: true}) offer!: OfferPreview;
   @Output() hovered = new EventEmitter<OfferPreview | null>();
+  @Output() toggled = new EventEmitter<void>();
 
   private offerService = inject(OfferService);
   private store = inject(Store<AppState>);
+  private destroyRef = inject(DestroyRef);
 
   protected readonly Math = Math;
   protected readonly AppRoute = AppRoute;
@@ -37,7 +41,14 @@ export class OfferCardComponent {
   }
 
   public toggleFavoriteOffer() {
-    this.offerService.toggleFavorite(this.offer.id, !this.offer.isFavorite);
+    this.offerService.toggleFavorite(this.offer.id, !this.offer.isFavorite)
+      .pipe(first(success => success !== null),
+        takeUntilDestroyed(this.destroyRef),
+        tap((success) => {
+          if (success) {
+            this.toggled.emit()
+          }
+        })).subscribe();
   }
 
   protected readonly AuthorizationStatus = AuthorizationStatus;

@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal,} from '@angular/core';
+import {ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal, WritableSignal,} from '@angular/core';
 import {HeaderComponent} from '../../shared/components/header/header.component';
 import {Offer, OfferPreview} from '../../core/models/offers';
 import {Comment} from '../../core/models/comments';
@@ -33,6 +33,7 @@ import {ScrollUpDirective} from '../../shared/directives/scroll-up.directive';
     SortByDatePipe,
     NgClass,
     ScrollUpDirective,
+
   ],
   templateUrl: './offer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -46,6 +47,7 @@ export class OfferComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private refreshComments$ = new Subject<void>();
   private refreshOffer$ = new Subject<void>();
+  private refreshNearbyOffers$ = new Subject<void>();
   private store = inject(Store<AppState>);
 
   protected readonly Math = Math;
@@ -74,11 +76,12 @@ export class OfferComponent implements OnInit {
               }),
             ));
 
-          const nearbyOffers$ = this.offerDataService.getNearbyOffers(id).pipe(
+          const nearbyOffers$ = merge(this.offerDataService.getNearbyOffers(id),
+            this.refreshNearbyOffers$.pipe(switchMap(() => this.offerDataService.getNearbyOffers(id)),
             catchError(() => {
               return of([]);
             }),
-          );
+          ));
 
           const comments$ = merge(
             this.commentService.getComments(id),
@@ -119,5 +122,9 @@ export class OfferComponent implements OnInit {
           }
         })).subscribe();
     }
+  }
+
+  public refreshNearbyOffers() {
+    this.refreshNearbyOffers$.next();
   }
 }
