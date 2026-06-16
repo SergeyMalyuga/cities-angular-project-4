@@ -19,6 +19,7 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 })
 export class OfferCardComponent {
   @Input({required: true}) offer!: OfferPreview;
+  @Input() isFavorite = false;
   @Output() hovered = new EventEmitter<OfferPreview | null>();
   @Output() toggled = new EventEmitter<void>();
 

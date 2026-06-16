@@ -1,5 +1,9 @@
 <article
-  class="cities__card place-card"
+  [ngClass]="{
+  'favorites__card': isFavorite,
+  'cities__card': !isFavorite,
+  'place-card': true
+  }"
   appHoverTracker
   (hovered)="onHovered($event)"
 >
@@ -8,18 +12,31 @@
       <span>Premium</span>
     </div>
   }
-  <div class="cities__image-wrapper place-card__image-wrapper">
+  <div
+  [ngClass]="{
+  'favorites__image-wrapper': isFavorite,
+  'cities__image-wrapper': !isFavorite,
+  'place-card__image-wrapper': true
+  }"
+  >
     <a [routerLink]="['/', AppRoute.OFFER, offer.id]">
       <img
         class="place-card__image"
         src="{{ offer.previewImage }}"
+        [width]="isFavorite ? '150' : '260'"
+        [height]="isFavorite ? '110' : '200'"
         width="260"
         height="200"
         alt="Place image"
       />
     </a>
   </div>
-  <div class="place-card__info">
+  <div
+  [ngClass]="{
+  'favorites__card-info': isFavorite,
+  'place-card__info': true
+  }"
+  >
     <div class="place-card__price-wrapper">
       <div class="place-card__price">
         <b class="place-card__price-value">&euro;{{ offer.price }}</b>
