@@ -22,3 +22,8 @@ export const selectCurrentCity = createSelector(
   selectCityState,
   (city) => city,
 );
+
+export const selectIsOfferLoading = createSelector(
+  selectOffersState,
+  state => state.isLoading,
+)
