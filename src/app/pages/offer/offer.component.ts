@@ -19,6 +19,7 @@ import {selectAuthStatus} from '../../store/user/selectors/user.selectors';
 import {OfferService} from '../../core/services/offer.service';
 import {selectIsFavoriteOffersLoading} from '../../store/favorite-offer/selectors/favorite-offer.selectors';
 import {ScrollUpDirective} from '../../shared/directives/scroll-up.directive';
+import {LoaderComponent} from '../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-offer',
@@ -33,6 +34,7 @@ import {ScrollUpDirective} from '../../shared/directives/scroll-up.directive';
     SortByDatePipe,
     NgClass,
     ScrollUpDirective,
+    LoaderComponent,
 
   ],
   templateUrl: './offer.component.html',
