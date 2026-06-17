@@ -9,10 +9,12 @@ import {
 } from '../../store/favorite-offer/selectors/favorite-offer.selectors';
 import {OfferCardComponent} from '../../shared/components/offer-card/offer-card.component';
 import {TitleCasePipe} from '@angular/common';
+import {RouterLink} from '@angular/router';
+import {AppRoute} from '../../core/constants/const';
 
 @Component({
   selector: 'app-favorites',
-  imports: [HeaderComponent, OfferCardComponent, TitleCasePipe],
+  imports: [HeaderComponent, OfferCardComponent, TitleCasePipe, RouterLink],
   templateUrl: './favorites.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -51,4 +53,5 @@ export class FavoritesComponent implements OnInit {
   }
 
   protected readonly Object = Object;
+  protected readonly AppRoute = AppRoute;
 }
